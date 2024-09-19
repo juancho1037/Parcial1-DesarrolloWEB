@@ -1,0 +1,17 @@
+.content {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+article {
+    position: relative;
+    background-color: rgba(128, 0, 255, 0.8);
+    margin: 20px;
+    padding: 20px;
+    width: 200px;
+    border-radius: 10px;
+    text-align: left;
+}
