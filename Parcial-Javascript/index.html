@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User List</title>
+  <link rel="stylesheet" href="styles/common.css">
+
 </head>
 <body>
   <h1>User List</h1>
+  <button id="add-user-button">Add New User</button>
   <table id="user-table">
     <thead>
       <tr>
@@ -22,221 +25,104 @@
     <tbody id="user-table-body">
     </tbody>
   </table>
-  
   <!-- Modal para agregar nuevo usuario -->
-<div class="modal" id="add-user-modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Add User</h2>
-      <button class="close-button" id="close-add-modal">&times;</button>
+  <div class="modal" id="add-user-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add User</h2>
+            <button class="close-button" id="close-add-modal" aria-label="Close Add User Modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="add-user-form" novalidate>
+                <div>
+                    <label for="add-first-name">First Name:</label>
+                    <input type="text" id="add-first-name" name="first-name" required minlength="2" maxlength="50">
+                    <span class="error-message" id="add-first-name-error"></span>
+                </div>
+                <div>
+                    <label for="add-last-name">Last Name:</label>
+                    <input type="text" id="add-last-name" name="last-name" required minlength="2" maxlength="50">
+                    <span class="error-message" id="add-last-name-error"></span>
+                </div>
+                <div>
+                    <label for="add-email">Email:</label>
+                    <input type="email" id="add-email" name="email" required maxlength="100">
+                    <span class="error-message" id="add-email-error"></span>
+                </div>
+                <div>
+                    <label for="add-job-title">Job Title:</label>
+                    <input type="text" id="add-job-title" name="job-title" required minlength="2" maxlength="100">
+                    <span class="error-message" id="add-job-title-error"></span>
+                </div>
+                <div>
+                    <label for="add-phone">Phone:</label>
+                    <input type="tel" id="add-phone" name="phone" required pattern="^\+?[0-9]{7,15}$">
+                    <span class="error-message" id="add-phone-error"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="add-user-submit" disabled>Add</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="modal-body">
-      <form id="add-user-form">
-        <div>
-          <label for="add-first-name">First Name:</label>
-          <input type="text" id="add-first-name" required>
-        </div>
-        <div>
-          <label for="add-last-name">Last Name:</label>
-          <input type="text" id="add-last-name" required>
-        </div>
-        <div>
-          <label for="add-email">Email:</label>
-          <input type="email" id="add-email" required>
-        </div>
-        <div>
-          <label for="add-job-title">Job Title:</label>
-          <input type="text" id="add-job-title" required>
-        </div>
-        <div>
-          <label for="add-phone">Phone:</label>
-          <input type="text" id="add-phone" required>
-        </div>
-        <div class="modal-footer">
-          <button type="submit">Add</button>
-        </div>
-      </form>
-    </div>
-  </div>
 </div>
 
-<!-- Botón para abrir el modal para agregar usuario -->
-<button id="add-user-button">Add New User</button>
-
-<script type="module">
-  import API from './api.js';
-
-  // Función para abrir el modal de agregar usuario
-  function openAddModal() {
-    const modal = document.getElementById('add-user-modal');
-    modal.style.display = 'flex';
-  }
-
-  // Función para cerrar el modal de agregar usuario
-  function closeAddModal() {
-    const modal = document.getElementById('add-user-modal');
-    modal.style.display = 'none';
-  }
-
-  // Función para gestionar el envío del formulario para agregar un nuevo usuario
-  async function handleAddFormSubmit(event) {
-    event.preventDefault();
-
-    const newUser = {
-      firstName: document.getElementById('add-first-name').value,
-      lastName: document.getElementById('add-last-name').value,
-      email: document.getElementById('add-email').value,
-      jobTitle: document.getElementById('add-job-title').value,
-      phone: document.getElementById('add-phone').value,
-    };
-
-    try {
-      await API.createUser(newUser);
-      closeAddModal();
-    } catch (error) {
-      console.error('Error adding user:', error);
-    }
-  }
-
-  // Agregar un detector de eventos al botón Agregar usuario
-  document.getElementById('add-user-button').addEventListener('click', openAddModal);
-
-  // Agregar un detector de eventos al botón de cierre del modal de adición
-  document.getElementById('close-add-modal').addEventListener('click', closeAddModal);
-
-  // Agregar un detector de eventos al envío del formulario para agregar un nuevo usuario
-  document.getElementById('add-user-form').addEventListener('submit', handleAddFormSubmit);
+<script type="module" src="./validations/addUser.js">
 </script>
+
+
+<!-- Botón para abrir el modal para agregar usuario -->
+
+
+<script type="module" src="createUser.js"></script>
   <!-- Modal para editar usuario -->
   <div class="modal" id="edit-user-modal">
     <div class="modal-content">
-      <div class="modal-header">
-        <h2>Edit User</h2>
-        <button class="close-button" id="close-modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="edit-user-form">
-          <input type="hidden" id="edit-user-id">
-          <div>
-            <label for="edit-first-name">First Name:</label>
-            <input type="text" id="edit-first-name" required>
-          </div>
-          <div>
-            <label for="edit-last-name">Last Name:</label>
-            <input type="text" id="edit-last-name" required>
-          </div>
-          <div>
-            <label for="edit-email">Email:</label>
-            <input type="email" id="edit-email" required>
-          </div>
-          <div>
-            <label for="edit-job-title">Job Title:</label>
-            <input type="text" id="edit-job-title" required>
-          </div>
-          <div>
-            <label for="edit-phone">Phone:</label>
-            <input type="text" id="edit-phone" required>
-          </div>
-          <div class="modal-footer">
-            <button type="submit">Save</button>
-          </div>
-        </form>
-      </div>
+        <div class="modal-header">
+            <h2>Edit User</h2>
+            <button class="close-button" id="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-user-form">
+                <input type="hidden" id="edit-user-id">
+                <div>
+                    <label for="edit-first-name">First Name:</label>
+                    <input type="text" id="edit-first-name" required minlength="2" maxlength="50">
+                    <span class="error-message" id="first-name-error"></span>
+                </div>
+                <div>
+                    <label for="edit-last-name">Last Name:</label>
+                    <input type="text" id="edit-last-name" required minlength="2" maxlength="50">
+                    <span class="error-message" id="last-name-error"></span>
+                </div>
+                <div>
+                    <label for="edit-email">Email:</label>
+                    <input type="email" id="edit-email" required>
+                    <span class="error-message" id="email-error"></span>
+                </div>
+                <div>
+                    <label for="edit-job-title">Job Title:</label>
+                    <input type="text" id="edit-job-title" required minlength="2" maxlength="100">
+                    <span class="error-message" id="job-title-error"></span>
+                </div>
+                <div>
+                    <label for="edit-phone">Phone:</label>
+                    <input type="text" id="edit-phone" required pattern="^\+?\d{10,15}$">
+                    <span class="error-message" id="phone-error"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
+</div>
 
-  <script type="module">
-    import API from './api.js';
+<script type="module" src="./validations/editUser.js">
+</script>
 
-    // Función para rellenar la tabla con datos del usuario
-    async function populateUserTable() {
-      try {
-        const users = await API.getUsers(); // Llamar a la API para obtener los usuarios
-        const tableBody = document.getElementById('user-table-body');
 
-        // Borrar cualquier dato existente
-        tableBody.innerHTML = '';
-
-        // Iterar sobre los usuarios y crear filas en la tabla
-        users.forEach(user => {
-          const row = document.createElement('tr');
-
-          row.innerHTML = `
-            <td><img class="user-photo" src="${user.photo}" alt="${user.firstName} ${user.lastName}"></td>
-            <td>${user.firstName}</td>
-            <td>${user.lastName}</td>
-            <td>${user.email}</td>
-            <td>${user.jobTitle}</td>
-            <td>${user.phone}</td>
-            <td><button class="edit-user-button" data-id="${user.id}">Edit</button></td>
-          `;
-
-          tableBody.appendChild(row);
-        });
-
-        // Agregar detectores de eventos a los botones de edición
-        document.querySelectorAll('.edit-user-button').forEach(button => {
-          button.addEventListener('click', (event) => {
-            const userId = event.target.dataset.id;
-            openEditModal(userId, users);
-          });
-        });
-      } catch (error) {
-        console.error('Error populating user table:', error);
-      }
-    }
-
-    // Función para abrir el modal de edición y llenar el formulario con datos del usuario
-    function openEditModal(userId, users) {
-      const user = users.find(user => user.id == userId);
-      document.getElementById('edit-user-id').value = user.id;
-      document.getElementById('edit-first-name').value = user.firstName;
-      document.getElementById('edit-last-name').value = user.lastName;
-      document.getElementById('edit-email').value = user.email;
-      document.getElementById('edit-job-title').value = user.jobTitle;
-      document.getElementById('edit-phone').value = user.phone;
-
-      const modal = document.getElementById('edit-user-modal');
-      modal.style.display = 'flex';
-    }
-
-    // Función para cerrar el modal
-    function closeEditModal() {
-      const modal = document.getElementById('edit-user-modal');
-      modal.style.display = 'none';
-    }
-
-    // Función para gestionar el envío del formulario para editar un usuario
-    async function handleEditFormSubmit(event) {
-      event.preventDefault();
-
-      const userId = document.getElementById('edit-user-id').value;
-      const updatedUser = {
-        firstName: document.getElementById('edit-first-name').value,
-        lastName: document.getElementById('edit-last-name').value,
-        email: document.getElementById('edit-email').value,
-        jobTitle: document.getElementById('edit-job-title').value,
-        phone: document.getElementById('edit-phone').value,
-      };
-
-      try {
-        await API.updateUser(userId, updatedUser);
-        closeEditModal();
-        populateUserTable(); // Actualice la tabla para mostrar datos actualizados
-      } catch (error) {
-        console.error('Error updating user:', error);
-      }
-    }
-
-    //Rellena la tabla cuando se carga la página
-    document.addEventListener('DOMContentLoaded', populateUserTable);
-
-    //Agregar un detector de eventos al botón de cierre del modal
-    document.getElementById('close-modal').addEventListener('click', closeEditModal);
-
-    //Agregar un detector de eventos al envío del formulario para editar al usuario
-    document.getElementById('edit-user-form').addEventListener('submit', handleEditFormSubmit);
-  </script>
+  <script type="module" src="editUser.js"></script>
 </body>
 </html>
 
