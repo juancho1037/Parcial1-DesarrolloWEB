@@ -51,4 +51,31 @@ export default class API {
       console.error("Error al crear el usuario:", error);
     }
   }
+
+  /**
+ * Actualiza un usuario con el ID de usuario especificado y los datos de updatedUser.
+ *
+ * @param {string} userId - el ID del usuario que se actualizará.
+ * @param {Object} updatedUser - los datos de usuario actualizados.
+ * @returns {Promise<Object>} Los datos de usuario actualizados.
+ * @throws Generará un error si la operación de actualización falla.
+ */
+  static async updateUser(userId, updatedUser) {
+    try {
+      const response = await fetch(`${BASE_URL}/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedUser),
+      });
+      if (!response.ok) {
+        alert("Error al actualizar el usuario");
+        throw new Error("Error al actualizar el usuario");
+      }
+      alert("Usuario actualizado con éxito");
+      return await response.json();
+    } catch (error) {
+      console.error("Error al actualizar el usuario:", error);
+      alert("Error al actualizar el usuario:");
+    }
+  }
 }
