@@ -1,5 +1,6 @@
 # Proyecto final del curso de Desarrollo de Aplicaciones Web 2024-2
 
+
 ## Acerca del proyecto
 
 En este proyecto se desarrollará una aplicación web llamada **Planificador de Viajes**, que permitirá a los usuarios crear y gestionar itinerarios personalizados para sus viajes. El objetivo es poner en práctica los conceptos aprendidos a lo largo del curso, incluyendo el desarrollo frontend y backend, la implementación de una API REST y el despliegue de la aplicación utilizando Docker.
