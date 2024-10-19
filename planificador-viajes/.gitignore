@@ -1,0 +1,48 @@
+# Dependencias
+node_modules/
+/dist
+
+# Archivos de log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archivos del editor
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de entorno local
+.env.local
+.env.*.local
+
+# Archivos de compilación de Vue
+/dist
+
+# Archivos de caché
+.cache
+.temp
+
+# Archivos de cobertura
+coverage
+
+# Archivos de configuración de Cypress
+cypress/videos/
+cypress/screenshots/
+
+# Opcional: ignorar todos los archivos .env (recomendado para seguridad)
+# .env*
+
+# Archivos temporales
+*.log
+*.tmp
+*.temp
