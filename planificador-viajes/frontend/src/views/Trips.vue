@@ -1,22 +1,25 @@
-<!-- src/views/Trips.vue -->
 <template>
   <div class="trips">
     <h2>My Trips</h2>
+    <AddTrip @trip-added="addTrip" />
     <ul v-if="trips.length">
       <li v-for="trip in trips" :key="trip.id">
         {{ trip.destination }} ({{ trip.startDate }} - {{ trip.endDate }})
       </li>
     </ul>
     <p v-else>No trips planned yet. Start by adding a new trip!</p>
-    <button @click="addTrip">Add New Trip</button>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import AddTrip from "@/components/AddTrip.vue";
 
 export default {
   name: "Trips",
+  components: {
+    AddTrip,
+  },
   data() {
     return {
       trips: [],
@@ -31,9 +34,8 @@ export default {
         console.error("Error fetching trips:", error);
       }
     },
-    addTrip() {
-      // TODO: Implement add trip functionality
-      console.log("Add trip clicked");
+    addTrip(newTrip) {
+      this.trips.push(newTrip);
     },
   },
   mounted() {

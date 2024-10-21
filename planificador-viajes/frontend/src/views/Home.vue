@@ -1,4 +1,3 @@
-<!-- src/views/Home.vue -->
 <template>
   <div class="home">
     <h1>Welcome to Travel Planner</h1>
@@ -8,6 +7,6 @@
 
 <script>
 export default {
-  name: 'Home'
-}
+  name: "Home",
+};
 </script>
