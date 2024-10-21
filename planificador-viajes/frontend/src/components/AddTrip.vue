@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto mt-5" max-width="500">
-    <v-card-title>Añadir Nuevo Viaje</v-card-title>
+  <v-card class="mx-auto mt-5" max-width="600">
+    <v-card-title>Crear Nuevo Viaje</v-card-title>
     <v-card-text>
       <v-form @submit.prevent="submitTrip">
         <v-text-field
@@ -24,8 +24,14 @@
             ></v-date-picker>
           </v-col>
         </v-row>
+        <v-text-field
+          v-model.number="trip.numberOfDays"
+          label="Número de días"
+          type="number"
+          required
+        ></v-text-field>
         <v-btn type="submit" color="primary" block class="mt-2">
-          Añadir Viaje
+          Crear Viaje
         </v-btn>
       </v-form>
     </v-card-text>
@@ -43,6 +49,7 @@ export default {
         destination: "",
         startDate: "",
         endDate: "",
+        numberOfDays: 0,
       },
     };
   },
@@ -65,6 +72,7 @@ export default {
         destination: "",
         startDate: "",
         endDate: "",
+        numberOfDays: 0,
       };
     },
   },

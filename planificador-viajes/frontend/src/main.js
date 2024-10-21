@@ -6,7 +6,9 @@ import vuetify from './plugins/vuetify'
 // Importa los estilos de Vuetify
 import 'vuetify/styles'
 
-createApp(App)
-  .use(router)
-  .use(vuetify)
-  .mount('#app')
+const app = createApp(App)
+
+app.use(router)
+app.use(vuetify)
+
+app.mount('#app')
