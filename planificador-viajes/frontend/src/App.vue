@@ -1,7 +1,7 @@
 <template>
-  <v-app>
-    <v-app-bar app>
-      <v-toolbar-title>Planificador de Viajes</v-toolbar-title>
+  <v-app theme="light">
+    <v-app-bar app color="primary" dark>
+      <v-app-bar-title>Planificador de Viajes</v-app-bar-title>
       <v-spacer></v-spacer>
       <v-btn to="/" text>Inicio</v-btn>
       <v-btn to="/trips" text>Mis Viajes</v-btn>
@@ -10,9 +10,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container>
-        <router-view></router-view>
-      </v-container>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
@@ -37,3 +35,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.v-application {
+  background-color: #f5f5f5; /* Un gris muy claro */
+}
+</style>
