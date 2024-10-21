@@ -1,22 +1,35 @@
 <template>
-  <div class="add-trip">
-    <h2>Add New Trip</h2>
-    <form @submit.prevent="submitTrip">
-      <div>
-        <label for="destination">Destination:</label>
-        <input id="destination" v-model="trip.destination" required />
-      </div>
-      <div>
-        <label for="startDate">Start Date:</label>
-        <input id="startDate" type="date" v-model="trip.startDate" required />
-      </div>
-      <div>
-        <label for="endDate">End Date:</label>
-        <input id="endDate" type="date" v-model="trip.endDate" required />
-      </div>
-      <button type="submit">Add Trip</button>
-    </form>
-  </div>
+  <v-card class="mx-auto mt-5" max-width="500">
+    <v-card-title>Añadir Nuevo Viaje</v-card-title>
+    <v-card-text>
+      <v-form @submit.prevent="submitTrip">
+        <v-text-field
+          v-model="trip.destination"
+          label="Destino"
+          required
+        ></v-text-field>
+        <v-row>
+          <v-col cols="6">
+            <v-date-picker
+              v-model="trip.startDate"
+              label="Fecha de inicio"
+              required
+            ></v-date-picker>
+          </v-col>
+          <v-col cols="6">
+            <v-date-picker
+              v-model="trip.endDate"
+              label="Fecha de fin"
+              required
+            ></v-date-picker>
+          </v-col>
+        </v-row>
+        <v-btn type="submit" color="primary" block class="mt-2">
+          Añadir Viaje
+        </v-btn>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -57,28 +70,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.add-trip {
-  max-width: 400px;
-  margin: 0 auto;
-}
-form div {
-  margin-bottom: 1rem;
-}
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-input {
-  width: 100%;
-  padding: 0.5rem;
-}
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
-}
-</style>

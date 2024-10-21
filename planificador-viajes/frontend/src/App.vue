@@ -1,26 +1,39 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/trips">My Trips</router-link>
-    </nav>
-    <router-view />
-  </div>
+  <v-app>
+    <v-app-bar app>
+      <v-toolbar-title>Planificador de Viajes</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn to="/" text>Inicio</v-btn>
+      <v-btn to="/trips" text>Mis Viajes</v-btn>
+      <v-btn to="/login" text v-if="!isLoggedIn">Login</v-btn>
+      <v-btn @click="logout" text v-else>Logout</v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <v-container>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      isLoggedIn: false,
+    };
+  },
+  created() {
+    this.isLoggedIn = !!localStorage.getItem("token");
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      this.isLoggedIn = false;
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

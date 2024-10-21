@@ -1,18 +1,24 @@
 <template>
-  <div class="login">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <div>
-        <label for="email">Email:</label>
-        <input id="email" v-model="email" type="email" required />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" v-model="password" type="password" required />
-      </div>
-      <button type="submit">Login</button>
-    </form>
-  </div>
+  <v-card class="mx-auto mt-5" max-width="400">
+    <v-card-title>Login</v-card-title>
+    <v-card-text>
+      <v-form @submit.prevent="login">
+        <v-text-field
+          v-model="email"
+          label="Email"
+          type="email"
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="password"
+          label="Password"
+          type="password"
+          required
+        ></v-text-field>
+        <v-btn type="submit" color="primary" block class="mt-2"> Login </v-btn>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -42,10 +48,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.login {
-  max-width: 300px;
-  margin: 0 auto;
-}
-</style>
