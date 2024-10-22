@@ -2,6 +2,12 @@
   <v-card class="mx-auto mt-5" max-width="400">
     <v-card-title class="text-h5">Iniciar Sesión</v-card-title>
     <v-card-text>
+      <v-alert v-if="showTestCredentials" type="info" class="mb-4">
+        Credenciales de prueba:<br />
+        Email: test@example.com<br />
+        Contraseña: 123456
+      </v-alert>
+
       <v-form @submit.prevent="login" ref="form">
         <v-text-field
           v-model="user.email"
@@ -29,8 +35,8 @@
           Iniciar Sesión
         </v-btn>
 
-        <v-btn text block class="mt-2" @click="$router.push('/register')">
-          ¿No tienes cuenta? Regístrate
+        <v-btn text block class="mt-2" @click="toggleTestCredentials">
+          Ver credenciales de prueba
         </v-btn>
       </v-form>
     </v-card-text>
@@ -41,7 +47,12 @@
 </template>
 
 <script>
-import axios from "axios";
+const TEST_USER = {
+  email: "test@example.com",
+  password: "123456",
+  name: "Usuario de Prueba",
+  id: "1",
+};
 
 export default {
   name: "Login",
@@ -55,6 +66,7 @@ export default {
       snackbar: false,
       snackbarText: "",
       snackbarColor: "success",
+      showTestCredentials: false,
       emailRules: [
         (v) => !!v || "El email es requerido",
         (v) => /.+@.+\..+/.test(v) || "El email debe ser válido",
@@ -67,20 +79,38 @@ export default {
       if (!this.$refs.form.validate()) return;
 
       this.loading = true;
+
+      // Simulación de delay de red
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       try {
-        const response = await axios.post("http://localhost:3000/login", {
-          email: this.user.email,
-          password: this.user.password,
-        });
+        // Verificar credenciales de prueba
+        if (
+          this.user.email === TEST_USER.email &&
+          this.user.password === TEST_USER.password
+        ) {
+          // Simular token JWT
+          const token = "test-jwt-token-" + Date.now();
 
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+          // Guardar datos de sesión
+          localStorage.setItem("token", token);
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              id: TEST_USER.id,
+              name: TEST_USER.name,
+              email: TEST_USER.email,
+            })
+          );
 
-        this.snackbarColor = "success";
-        this.snackbarText = "¡Bienvenido!";
-        this.snackbar = true;
+          this.snackbarColor = "success";
+          this.snackbarText = "¡Bienvenido!";
+          this.snackbar = true;
 
-        this.$router.push("/trips");
+          this.$router.push("/trips");
+        } else {
+          throw new Error("Credenciales inválidas");
+        }
       } catch (error) {
         this.snackbarColor = "error";
         this.snackbarText = "Email o contraseña incorrectos";
@@ -88,6 +118,14 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    toggleTestCredentials() {
+      this.showTestCredentials = !this.showTestCredentials;
+    },
+    // Método de conveniencia para desarrollo
+    autoFillTestCredentials() {
+      this.user.email = TEST_USER.email;
+      this.user.password = TEST_USER.password;
     },
   },
 };
