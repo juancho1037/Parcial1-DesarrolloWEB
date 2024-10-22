@@ -1,64 +1,77 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-title>Planificador de Viajes</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn to="/" text>Inicio</v-btn>
-      <template v-if="isLoggedIn">
-        <v-btn to="/trips" text>Mis Viajes</v-btn>
-        <v-menu offset-y>
-          <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" text>
-              {{ userName }}
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item @click="logout">
-              <v-list-item-title>Cerrar Sesión</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </template>
-      <template v-else>
-        <v-btn to="/login" text>Login</v-btn>
-        <v-btn to="/register" text>Registro</v-btn>
-      </template>
-    </v-app-bar>
-
+    <Navbar />
     <v-main>
-      <v-container>
-        <router-view></router-view>
-      </v-container>
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import Navbar from './components/Navbar.vue'
+
 export default {
-  name: "App",
-  data() {
-    return {
-      isLoggedIn: false,
-      userName: "",
-    };
-  },
-  created() {
-    this.checkAuth();
-  },
-  methods: {
-    checkAuth() {
-      const token = localStorage.getItem("token");
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      this.isLoggedIn = !!token;
-      this.userName = user.name || "";
-    },
-    logout() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      this.isLoggedIn = false;
-      this.userName = "";
-      this.$router.push("/login");
-    },
-  },
-};
+  name: 'App',
+  components: {
+    Navbar
+  }
+}
 </script>
+
+<style>
+:root {
+  --primary-color: #1976d2;
+  --secondary-color: #424242;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.v-application {
+  background: #f8fafc !important;
+}
+
+/* Transiciones de página */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Estilos globales */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Utilidades */
+.text-gradient {
+  background: linear-gradient(45deg, var(--v-primary-base), #1976d2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+</style>
