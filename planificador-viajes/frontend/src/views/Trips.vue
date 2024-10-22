@@ -1,25 +1,37 @@
 <template>
-  <v-container>
-    <div class="d-flex justify-space-between align-center mb-6">
-      <h1 class="text-h4">Mis Viajes</h1>
-      <v-btn color="primary" @click="showAddTripDialog = true">
-        Nuevo Viaje
-      </v-btn>
-    </div>
+  <v-container class="trips-container">
+    <!-- Header Section -->
+    <v-row class="header-section mb-8">
+      <v-col cols="12">
+        <div class="d-flex justify-space-between align-center">
+          <h1 class="text-h3 font-weight-bold">Mis Viajes</h1>
+          <v-btn
+            color="primary"
+            size="large"
+            prepend-icon="mdi-plus"
+            elevation="2"
+            @click="showAddTripDialog = true"
+          >
+            NUEVO VIAJE
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
 
-    <!-- Lista de Viajes -->
-    <v-row>
-      <v-col v-for="trip in trips" :key="trip.id" cols="12" md="6">
-        <v-card>
+    <!-- Trips Grid -->
+    <v-row v-if="trips && trips.length > 0">
+      <v-col v-for="trip in trips" :key="trip.id" cols="12" md="6" lg="4">
+        <v-card class="trip-card" elevation="3">
           <v-card-title>{{ trip.destination }}</v-card-title>
-          <v-card-subtitle>
-            {{ formatDate(trip.startDate) }} -
-            {{ formatDate(trip.endDate) }} ({{ trip.numberOfDays }} días)
-          </v-card-subtitle>
           <v-card-text>
-            <div v-if="trip.activities && trip.activities.length">
-              <strong>Actividades planificadas:</strong>
-              {{ trip.activities.length }}
+            <div class="mb-2">
+              {{ formatDate(trip.startDate) }} - {{ formatDate(trip.endDate) }}
+              <v-chip class="ml-2" color="primary" size="small">
+                {{ trip.numberOfDays }} días
+              </v-chip>
+            </div>
+            <div>
+              Actividades planificadas: {{ (trip.activities || []).length }}
             </div>
           </v-card-text>
           <v-card-actions>
@@ -35,20 +47,36 @@
       </v-col>
     </v-row>
 
-    <!-- Mensaje cuando no hay viajes -->
-    <v-alert v-if="!trips.length" type="info" class="mt-4">
-      No tienes viajes planificados. ¡Crea uno nuevo!
-    </v-alert>
+    <!-- Empty State -->
+    <v-row v-else justify="center" class="mt-16">
+      <v-col cols="12" sm="8" md="6" class="text-center">
+        <v-icon size="x-large" color="grey" class="mb-4"
+          >mdi-map-marker-question</v-icon
+        >
+        <h3 class="text-h5 mb-2">¡No tienes viajes planificados!</h3>
+        <p class="text-body-1 text-grey mb-6">
+          Comienza tu aventura creando tu primer viaje.
+        </p>
+        <v-btn
+          color="primary"
+          size="large"
+          prepend-icon="mdi-plus"
+          @click="showAddTripDialog = true"
+        >
+          Crear mi primer viaje
+        </v-btn>
+      </v-col>
+    </v-row>
 
-    <!-- Diálogo para añadir nuevo viaje -->
-    <v-dialog v-model="showAddTripDialog" max-width="600px">
+    <!-- New Trip Dialog -->
+    <v-dialog v-model="showAddTripDialog" width="600">
       <v-card>
         <v-card-title>Nuevo Viaje</v-card-title>
         <v-card-text>
-          <v-form ref="form" @submit.prevent="submitNewTrip">
+          <v-form @submit.prevent="submitNewTrip">
             <v-text-field
               v-model="newTrip.destination"
-              label="Destino"
+              label="¿A dónde viajarás?"
               required
             ></v-text-field>
             <v-row>
@@ -69,30 +97,34 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="grey" text @click="showAddTripDialog = false">
-                Cancelar
-              </v-btn>
-              <v-btn color="primary" type="submit"> Guardar </v-btn>
-            </v-card-actions>
           </v-form>
         </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn variant="text" @click="showAddTripDialog = false">
+            Cancelar
+          </v-btn>
+          <v-btn color="primary" @click="submitNewTrip"> Crear Viaje </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <!-- Diálogo para detalles del viaje -->
-    <v-dialog v-model="showTripDetailsDialog" max-width="800px">
+    <!-- Trip Details Dialog -->
+    <v-dialog v-model="showTripDetailsDialog" width="800">
       <v-card v-if="selectedTrip">
         <v-card-title>{{ selectedTrip.destination }}</v-card-title>
-        <v-card-subtitle>
-          {{ formatDate(selectedTrip.startDate) }} -
-          {{ formatDate(selectedTrip.endDate) }}
-        </v-card-subtitle>
         <v-card-text>
-          <h3 class="text-h6 mb-3">Actividades</h3>
+          <div class="mb-4">
+            {{ formatDate(selectedTrip.startDate) }} -
+            {{ formatDate(selectedTrip.endDate) }} ({{
+              selectedTrip.numberOfDays
+            }}
+            días)
+          </div>
+
+          <h3 class="text-h6 mb-2">Actividades</h3>
           <v-list
-            v-if="selectedTrip.activities && selectedTrip.activities.length"
+            v-if="selectedTrip.activities && selectedTrip.activities.length > 0"
           >
             <v-list-item
               v-for="activity in selectedTrip.activities"
@@ -104,13 +136,13 @@
               </v-list-item-subtitle>
             </v-list-item>
           </v-list>
-          <v-alert v-else type="info">
+          <v-alert v-else type="info" class="mt-2">
             No hay actividades planificadas para este viaje.
           </v-alert>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="showTripDetailsDialog = false">
+          <v-btn color="primary" @click="showTripDetailsDialog = false">
             Cerrar
           </v-btn>
         </v-card-actions>
@@ -177,26 +209,30 @@ export default {
   },
   methods: {
     async fetchTrips() {
-      // Simulamos una llamada a API
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      this.trips = SAMPLE_TRIPS;
-    },
-    showTripDetails(trip) {
-      this.selectedTrip = trip;
-      this.showTripDetailsDialog = true;
+      try {
+        // Simulamos una llamada a API
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        this.trips = SAMPLE_TRIPS;
+      } catch (error) {
+        console.error("Error fetching trips:", error);
+        this.trips = []; // Aseguramos que trips sea al menos un array vacío
+      }
     },
     formatDate(dateString) {
       if (!dateString) return "";
       return new Date(dateString).toLocaleDateString();
     },
+    showTripDetails(trip) {
+      this.selectedTrip = trip;
+      this.showTripDetailsDialog = true;
+    },
     submitNewTrip() {
-      // Calcular número de días
       const start = new Date(this.newTrip.startDate);
       const end = new Date(this.newTrip.endDate);
       const numberOfDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
       const trip = {
-        id: Date.now().toString(), // ID temporal
+        id: Date.now().toString(),
         ...this.newTrip,
         numberOfDays,
         activities: [],
@@ -216,3 +252,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.trips-container {
+  max-width: 1400px;
+}
+
+.trip-card {
+  transition: transform 0.3s ease;
+}
+
+.trip-card:hover {
+  transform: translateY(-5px);
+}
+</style>
