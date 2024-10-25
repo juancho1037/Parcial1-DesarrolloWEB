@@ -1,8 +1,3 @@
-# Diagrama Entidad-Relación: Planificador de Viajes 🌎✈️
-
-## Diagrama
-
-```mermaid
 erDiagram
     USUARIOS ||--o{ VIAJES : crea
     USUARIOS ||--o{ RESENAS : escribe
@@ -12,16 +7,13 @@ erDiagram
     DESTINOS ||--o{ RESENAS : recibe
     DESTINOS ||--o{ EXPERIENCIAS : ofrece
     DESTINOS }|--|| CATEGORIAS : pertenece
-    ACTIVIDADES ||--o{ ACTIVIDADES_VIAJE : incluida_en
+    ACTIVIDADES ||--o{ ACTIVIDADES_VIAJE : incluye
 
     USUARIOS {
         int id PK
         string nombre
         string email
         string password
-        datetime fecha_registro
-        string foto_perfil
-        boolean activo
     }
 
     VIAJES {
@@ -30,10 +22,6 @@ erDiagram
         int destino_id FK
         date fecha_inicio
         date fecha_fin
-        string titulo
-        string descripcion
-        string estado
-        datetime fecha_creacion
     }
 
     DESTINOS {
@@ -41,39 +29,27 @@ erDiagram
         int categoria_id FK
         string nombre
         string descripcion
-        string ubicacion
-        string imagen
-        float calificacion_promedio
-        boolean destacado
-        float latitud
-        float longitud
+        float calificacion
     }
 
     CATEGORIAS {
         int id PK
         string nombre
         string descripcion
-        string icono
     }
 
     ACTIVIDADES {
         int id PK
         string nombre
         string descripcion
-        float duracion_estimada
-        string tipo
-        float precio_estimado
-        boolean requiere_reserva
+        float duracion
     }
 
     ACTIVIDADES_VIAJE {
         int id PK
         int viaje_id FK
         int actividad_id FK
-        datetime fecha_hora
         int dia_itinerario
-        string notas
-        string estado
     }
 
     RESENAS {
@@ -82,8 +58,6 @@ erDiagram
         int destino_id FK
         int calificacion
         string comentario
-        datetime fecha
-        boolean verificada
     }
 
     EXPERIENCIAS {
@@ -91,76 +65,10 @@ erDiagram
         int destino_id FK
         string titulo
         string descripcion
-        string imagen
-        boolean destacada
-        float precio
-        datetime fecha_inicio
-        datetime fecha_fin
     }
 
     FAVORITOS {
         int id PK
         int usuario_id FK
         int destino_id FK
-        datetime fecha_marcado
     }
-```
-
-## Descripción de Entidades
-
-### 🧑‍💼 USUARIOS
-- Almacena la información de los usuarios registrados
-- **PK**: id (identificador único)
-- Contiene datos personales y de autenticación
-
-### 🌍 VIAJES
-- Registra los viajes creados por los usuarios
-- **PK**: id
-- **FK**: usuario_id (referencia a USUARIOS), destino_id (referencia a DESTINOS)
-- Incluye fechas y detalles del viaje
-
-### 📍 DESTINOS
-- Contiene información sobre lugares turísticos
-- **PK**: id
-- **FK**: categoria_id (referencia a CATEGORIAS)
-- Almacena ubicación, calificaciones y detalles del destino
-
-### 🏷️ CATEGORIAS
-- Clasifica los destinos (ej: Playa, Montaña, Ciudad, Aventura)
-- **PK**: id
-- Define tipos de destinos turísticos
-
-### 🎯 ACTIVIDADES
-- Catálogo de actividades disponibles
-- **PK**: id
-- Define actividades genéricas que pueden incluirse en los viajes
-
-### 📅 ACTIVIDADES_VIAJE
-- Relaciona actividades específicas con viajes
-- **PK**: id
-- **FK**: viaje_id (referencia a VIAJES), actividad_id (referencia a ACTIVIDADES)
-- Organiza el itinerario del viaje
-
-### ⭐ RESENAS
-- Almacena valoraciones de usuarios sobre destinos
-- **PK**: id
-- **FK**: usuario_id (referencia a USUARIOS), destino_id (referencia a DESTINOS)
-
-### 🎨 EXPERIENCIAS
-- Define experiencias especiales en destinos
-- **PK**: id
-- **FK**: destino_id (referencia a DESTINOS)
-- Incluye ofertas y actividades destacadas
-
-### ❤️ FAVORITOS
-- Gestiona destinos favoritos de usuarios
-- **PK**: id
-- **FK**: usuario_id (referencia a USUARIOS), destino_id (referencia a DESTINOS)
-
-## Leyenda de Relaciones
-
-- `||--o{`: Uno a muchos (opcional)
-- `||--|{`: Uno a muchos (obligatorio)
-- `}|--||`: Muchos a uno
-- `PK`: Primary Key (Llave Primaria)
-- `FK`: Foreign Key (Llave Foránea)
