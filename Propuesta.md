@@ -7,17 +7,17 @@ En este proyecto se desarrollará una aplicación web llamada **Planificador de 
 ## Funcionalidades principales
 
 <ul>
-  <li><strong>Explorar destinos:</strong> Disponible para usuarios no registrados e incluirá:
+  <li><strong>Explorar destinos:</strong> Disponible para todos los usuarios:
     <ul>
       <li>Una barra de búsqueda para que los usuarios puedan encontrar destinos específicos.</li>
       <li>Una sección de destinos populares.</li>
       <li>Exploración por categorías: Playa, Montaña, Ciudad, Aventura.</li>
       <li>Experiencias destacadas, donde se resaltarán actividades interesantes en los destinos.</li>
       <li>Favoritos temporales: Los usuarios pueden marcar destinos como favoritos durante la sesión.</li>
-      <li>Ofertas especiales: Promociones limitadas en ciertos destinos o actividades.</li>
-      <li>Previsualización de itinerarios: Ofrecer una vista previa de itinerarios generados automáticamente.</li>
-      <li>Reseñas y valoraciones: Mostrar reseñas y valoraciones de otros usuarios sobre los destinos.</li>
     </ul>
+  <li><strong>Ofertas especiales: Promociones limitadas en ciertos destinos o actividades.</strong>
+  <li><strong>Previsualización de itinerarios: Ofrecer una vista previa de itinerarios generados automáticamente.</strong>
+  <li><strong> Reseñas y valoraciones: Mostrar reseñas y valoraciones de otros usuarios sobre los destinos.</strong>  
   </li>
   <li><strong>Usuarios registrados:</strong> Los usuarios registrados tendrán acceso a las siguientes funcionalidades:
     <ul>
