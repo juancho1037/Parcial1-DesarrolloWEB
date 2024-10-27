@@ -1,124 +1,173 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../components/Login.vue'        // Cambiado de views a components
-import Register from '../components/Register.vue'  // Cambiado de views a components
-import Trips from '../views/Trips.vue'
-import Explore from '../views/Explore.vue'
-import Profile from '../views/Profile.vue'
-import TripDetails from '../components/TripDetails.vue' // Cambiado de views a components
+import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "@/store/modules/auth.js";
 
+// Importación de vistas
+const Home = () => import("@/views/Home.vue");
+const Login = () => import("@/views/Login.vue");
+const Register = () => import("@/views/Register.vue");
+const Explore = () => import("@/views/Explore.vue");
+const Profile = () => import("@/views/Profile.vue");
+const NotFound = () => import("@/views/NotFound.vue");
+
+// Importación de vistas de viajes
+const Trips = () => import("@/components/trips/TripList.vue");
+const TripCreate = () => import("@/components/trips/TripCreate.vue");
+const TripEdit = () => import("@/components/trips/TripEdit.vue");
+const TripDetails = () => import("@/components/trips/TripDetails.vue");
+
+// Configuración de rutas
 const routes = [
   {
-    path: '/',
-    name: 'home',
+    path: "/",
+    name: "Home",
     component: Home,
     meta: {
-      title: 'Inicio',
-      requiresAuth: false
-    }
+      title: "Inicio",
+      requiresAuth: false,
+    },
   },
   {
-    path: '/login',
-    name: 'login',
+    path: "/login",
+    name: "Login",
     component: Login,
     meta: {
-      title: 'Iniciar Sesión',
+      title: "Iniciar Sesión",
       requiresAuth: false,
-      hideForAuth: true
-    }
+      hideForAuth: true, // Ocultar si el usuario está autenticado
+    },
   },
   {
-    path: '/register',
-    name: 'register',
+    path: "/register",
+    name: "Register",
     component: Register,
     meta: {
-      title: 'Registro',
+      title: "Registro",
       requiresAuth: false,
-      hideForAuth: true
-    }
+      hideForAuth: true,
+    },
   },
   {
-    path: '/trips',
-    name: 'trips',
-    component: Trips,
+    path: "/forgot-password",
+    name: "ForgotPassword",
+    component: () => import("@/views/ForgotPassword.vue"),
     meta: {
-      title: 'Mis Viajes',
-      requiresAuth: true
-    }
+      title: "Recuperar Contraseña",
+      requiresAuth: false,
+      hideForAuth: true,
+    },
   },
   {
-    path: '/trips/:id',
-    name: 'trip-details',
-    component: TripDetails,
-    meta: {
-      title: 'Detalles del Viaje',
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/explore',
-    name: 'explore',
+    path: "/explore",
+    name: "Explore",
     component: Explore,
     meta: {
-      title: 'Explorar Destinos',
-      requiresAuth: false
-    }
+      title: "Explorar Destinos",
+      requiresAuth: false,
+    },
   },
   {
-    path: '/profile',
-    name: 'profile',
+    path: "/profile",
+    name: "Profile",
     component: Profile,
     meta: {
-      title: 'Mi Perfil',
-      requiresAuth: true
-    }
+      title: "Mi Perfil",
+      requiresAuth: true,
+    },
   },
-  // La ruta 404 puede ser manejada por la página Home temporalmente
+  // Rutas de viajes
   {
-    path: '/:pathMatch(.*)*',
-    name: 'not-found',
-    component: Home, // Usamos Home en lugar de NotFound
+    path: "/trips",
+    name: "Trips",
+    component: Trips,
     meta: {
-      title: 'Página no encontrada'
-    }
-  }
-]
+      title: "Mis Viajes",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/trips/create",
+    name: "TripCreate",
+    component: TripCreate,
+    meta: {
+      title: "Crear Viaje",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/trips/:id",
+    name: "TripDetails",
+    component: TripDetails,
+    meta: {
+      title: "Detalles del Viaje",
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/trips/:id/edit",
+    name: "TripEdit",
+    component: TripEdit,
+    meta: {
+      title: "Editar Viaje",
+      requiresAuth: true,
+    },
+  },
+  // Ruta 404
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: NotFound,
+    meta: {
+      title: "Página no encontrada",
+      requiresAuth: false,
+    },
+  },
+];
 
+// Creación del router
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  // Configuración del scroll
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     } else {
-      return { top: 0 }
+      return { top: 0 };
     }
-  }
-})
+  },
+});
 
-// Guard de navegación
-router.beforeEach((to, from, next) => {
-  // Obtener el estado de autenticación
-  const isAuthenticated = !!localStorage.getItem('token')
-
+// Guardián de navegación
+router.beforeEach(async (to, from, next) => {
   // Actualizar el título de la página
-  document.title = `${to.meta.title} - Planificador de Viajes`
+  document.title = `${to.meta.title} - Travel Planner`;
 
-  // Redirigir al login si la ruta requiere autenticación
+  const authStore = useAuthStore();
+  const isAuthenticated = authStore.isAuthenticated;
+
+  // Redireccionar si la ruta requiere autenticación y el usuario no está autenticado
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({
-      path: '/login',
-      query: { redirect: to.fullPath }
-    })
+      name: "Login",
+      query: { redirect: to.fullPath },
+    });
+    return;
   }
-  // Redirigir al home si el usuario está autenticado e intenta acceder a login/register
-  else if (to.meta.hideForAuth && isAuthenticated) {
-    next({ path: '/' })
-  }
-  // Continuar normalmente
-  else {
-    next()
-  }
-})
 
-export default router
+  // Redireccionar si la ruta está marcada como hideForAuth y el usuario está autenticado
+  if (to.meta.hideForAuth && isAuthenticated) {
+    next({ name: "Home" });
+    return;
+  }
+
+  // Continuar con la navegación normal
+  next();
+});
+
+// Manejo de errores de navegación
+router.onError((error) => {
+  console.error("Error de navegación:", error);
+  router.push({ name: "NotFound" });
+});
+
+export default router;
