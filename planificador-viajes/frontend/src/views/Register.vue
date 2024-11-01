@@ -11,7 +11,7 @@
             <p class="text-h6 text-white text-opacity-75 mb-8">
               Únete a nuestra comunidad de viajeros y descubre un mundo de posibilidades
             </p>
-            
+
             <!-- Features List -->
             <div class="features-list">
               <div class="feature-item" v-for="(feature, index) in features" :key="index">
@@ -64,81 +64,39 @@
             <v-form @submit.prevent="register" ref="form" class="register-form">
               <v-row>
                 <v-col cols="12">
-                  <v-text-field
-                    v-model="user.name"
-                    label="Nombre Completo"
-                    variant="outlined"
-                    :rules="nameRules"
-                    prepend-inner-icon="mdi-account"
-                    required
-                    class="input-field"
-                  ></v-text-field>
+                  <v-text-field v-model="user.nombre" label="Nombre Completo" variant="outlined" :rules="nameRules"
+                    prepend-inner-icon="mdi-account" required class="input-field"></v-text-field>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-text-field
-                    v-model="user.email"
-                    label="Correo Electrónico"
-                    type="email"
-                    variant="outlined"
-                    :rules="emailRules"
-                    prepend-inner-icon="mdi-email"
-                    required
-                    class="input-field"
-                  ></v-text-field>
+                  <v-text-field v-model="user.email" label="Correo Electrónico" type="email" variant="outlined"
+                    :rules="emailRules" prepend-inner-icon="mdi-email" required class="input-field"></v-text-field>
                 </v-col>
 
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="user.password"
-                    label="Contraseña"
-                    :type="showPassword ? 'text' : 'password'"
-                    variant="outlined"
-                    :rules="passwordRules"
-                    prepend-inner-icon="mdi-lock"
+                  <v-text-field v-model="user.password" label="Contraseña" :type="showPassword ? 'text' : 'password'"
+                    variant="outlined" :rules="passwordRules" prepend-inner-icon="mdi-lock"
                     :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                    @click:append-inner="showPassword = !showPassword"
-                    required
-                    class="input-field"
-                  ></v-text-field>
+                    @click:append-inner="showPassword = !showPassword" required class="input-field"></v-text-field>
                 </v-col>
 
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="user.confirmPassword"
-                    label="Confirmar Contraseña"
-                    :type="showConfirmPassword ? 'text' : 'password'"
-                    variant="outlined"
-                    :rules="[...passwordRules, passwordMatchRule]"
-                    prepend-inner-icon="mdi-lock-check"
+                  <v-text-field v-model="user.confirmPassword" label="Confirmar Contraseña"
+                    :type="showConfirmPassword ? 'text' : 'password'" variant="outlined"
+                    :rules="[...passwordRules, passwordMatchRule]" prepend-inner-icon="mdi-lock-check"
                     :append-inner-icon="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                    @click:append-inner="showConfirmPassword = !showConfirmPassword"
-                    required
-                    class="input-field"
-                  ></v-text-field>
+                    @click:append-inner="showConfirmPassword = !showConfirmPassword" required
+                    class="input-field"></v-text-field>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-checkbox
-                    v-model="terms"
-                    :rules="[(v) => !!v || 'Debes aceptar los términos para continuar']"
-                    label="Acepto los términos y condiciones"
-                    required
-                    color="primary"
-                  ></v-checkbox>
+                  <v-checkbox v-model="terms" :rules="[(v) => !!v || 'Debes aceptar los términos para continuar']"
+                    label="Acepto los términos y condiciones" required color="primary"></v-checkbox>
                 </v-col>
 
                 <v-col cols="12">
-                  <v-btn
-                    type="submit"
-                    color="primary"
-                    size="large"
-                    block
-                    :loading="loading"
-                    elevation="2"
-                    class="register-btn text-none"
-                    rounded
-                  >
+                  <v-btn type="submit" color="primary" size="large" block :loading="loading" elevation="2"
+                    class="register-btn text-none" rounded>
                     Crear Cuenta
                     <v-icon right class="ml-2">mdi-arrow-right</v-icon>
                   </v-btn>
@@ -146,12 +104,7 @@
 
                 <v-col cols="12" class="text-center">
                   <span class="text-body-2 text-medium-emphasis">¿Ya tienes una cuenta?</span>
-                  <v-btn
-                    variant="text"
-                    color="primary"
-                    class="ml-2"
-                    @click="$router.push('/login')"
-                  >
+                  <v-btn variant="text" color="primary" class="ml-2" @click="$router.push('/login')">
                     Iniciar Sesión
                   </v-btn>
                 </v-col>
@@ -164,21 +117,11 @@
                 O regístrate con
               </div>
               <div class="d-flex justify-center gap-4">
-                <v-btn
-                  variant="outlined"
-                  rounded
-                  color="primary"
-                  class="social-btn"
-                >
+                <v-btn variant="outlined" rounded color="primary" class="social-btn">
                   <v-icon left>mdi-google</v-icon>
                   Google
                 </v-btn>
-                <v-btn
-                  variant="outlined"
-                  rounded
-                  color="primary"
-                  class="social-btn"
-                >
+                <v-btn variant="outlined" rounded color="primary" class="social-btn">
                   <v-icon left>mdi-facebook</v-icon>
                   Facebook
                 </v-btn>
@@ -190,19 +133,10 @@
     </v-container>
 
     <!-- Success Snackbar -->
-    <v-snackbar
-      v-model="snackbar"
-      :color="snackbarColor"
-      :timeout="3000"
-      location="top"
-    >
+    <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" location="top">
       {{ snackbarText }}
       <template v-slot:actions>
-        <v-btn
-          color="white"
-          variant="text"
-          @click="snackbar = false"
-        >
+        <v-btn color="white" variant="text" @click="snackbar = false">
           Cerrar
         </v-btn>
       </template>
@@ -211,12 +145,15 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/store/modules/auth';
+import { useAppStore } from '@/store/modules/app';
+
 export default {
   name: 'Register',
   data() {
     return {
       user: {
-        name: '',
+        nombre: '', // Cambiado de 'name' a 'nombre' para coincidir con el backend
         email: '',
         password: '',
         confirmPassword: ''
@@ -225,9 +162,6 @@ export default {
       showPassword: false,
       showConfirmPassword: false,
       loading: false,
-      snackbar: false,
-      snackbarText: '',
-      snackbarColor: 'success',
       features: [
         { icon: 'mdi-map-marker-check', text: 'Acceso a destinos exclusivos' },
         { icon: 'mdi-calendar-check', text: 'Planificación personalizada' },
@@ -244,7 +178,10 @@ export default {
       ],
       passwordRules: [
         v => !!v || 'La contraseña es requerida',
-        v => v.length >= 6 || 'La contraseña debe tener al menos 6 caracteres'
+        v => v.length >= 6 || 'La contraseña debe tener al menos 6 caracteres',
+        v => /\d/.test(v) || 'La contraseña debe contener al menos un número',
+        v => /[a-z]/.test(v) || 'La contraseña debe contener al menos una minúscula',
+        v => /[A-Z]/.test(v) || 'La contraseña debe contener al menos una mayúscula'
       ]
     }
   },
@@ -257,27 +194,54 @@ export default {
   },
   methods: {
     async register() {
-      if (!this.$refs.form.validate()) return
-
-      this.loading = true
-      try {
-        // Simulación de registro
-        await new Promise(resolve => setTimeout(resolve, 1500))
-        
-        this.snackbarColor = 'success'
-        this.snackbarText = '¡Registro exitoso! Redirigiendo...'
-        this.snackbar = true
-
-        setTimeout(() => {
-          this.$router.push('/login')
-        }, 1500)
-      } catch (error) {
-        this.snackbarColor = 'error'
-        this.snackbarText = 'Error en el registro. Por favor, intenta nuevamente.'
-        this.snackbar = true
-      } finally {
-        this.loading = false
+      if (!this.$refs.form.validate()) return;
+      if (!this.terms) {
+        this.showSnackbar('Debes aceptar los términos y condiciones', 'error');
+        return;
       }
+
+      this.loading = true;
+      const authStore = useAuthStore();
+      const appStore = useAppStore();
+
+      try {
+        // Preparar datos para el registro
+        const userData = {
+          nombre: this.user.nombre,
+          email: this.user.email,
+          password: this.user.password
+        };
+
+        await authStore.register(userData);
+
+        appStore.showSnackbar({
+          text: '¡Registro exitoso! Redirigiendo al login...',
+          color: 'success'
+        });
+
+        // Esperar un momento antes de redirigir
+        setTimeout(() => {
+          this.$router.push('/login');
+        }, 1500);
+      } catch (error) {
+        appStore.showSnackbar({
+          text: error.response?.data?.message || 'Error en el registro',
+          color: 'error'
+        });
+
+        // Log detallado del error para debugging
+        console.error('Error de registro:', error.response?.data || error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    showSnackbar(text, color = 'success') {
+      const appStore = useAppStore();
+      appStore.showSnackbar({
+        text,
+        color
+      });
     }
   }
 }
@@ -321,13 +285,12 @@ export default {
   right: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, 
-    transparent 0%,
-    rgba(255, 255, 255, 0.05) 25%,
-    transparent 50%,
-    rgba(255, 255, 255, 0.05) 75%,
-    transparent 100%
-  );
+  background: linear-gradient(45deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.05) 75%,
+      transparent 100%);
   background-size: 40px 40px;
   animation: moveBackground 15s linear infinite;
 }
@@ -336,6 +299,7 @@ export default {
   0% {
     background-position: 0 0;
   }
+
   100% {
     background-position: 40px 40px;
   }
@@ -425,12 +389,10 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    45deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.2) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(45deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%);
   transform: translateX(-100%);
   transition: transform 0.6s;
 }
@@ -443,9 +405,11 @@ export default {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -456,6 +420,7 @@ export default {
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -482,7 +447,7 @@ export default {
   .form-container {
     padding: 2rem;
   }
-  
+
   .illustration-side {
     display: none;
   }
@@ -498,6 +463,7 @@ export default {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

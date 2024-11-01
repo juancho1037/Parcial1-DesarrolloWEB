@@ -6,45 +6,28 @@
         <v-row align="center" class="min-vh-100">
           <v-col cols="12" md="6" class="hero-text">
             <h1 class="text-h2 font-weight-bold mb-4 animate__animated animate__fadeInUp">
-              Planifica Tus Sueños,<br/>
+              Planifica Tus Sueños,<br />
               <span class="gradient-text">Vive Tus Aventuras</span>
             </h1>
             <p class="text-h6 text-medium-emphasis mb-6 animate__animated animate__fadeInUp animate__delay-1s">
               Descubre un mundo de posibilidades. Planifica, organiza y disfruta de cada momento de tus viajes.
             </p>
             <div class="d-flex flex-wrap gap-4 animate__animated animate__fadeInUp animate__delay-2s">
-              <v-btn
-                to="/trips"
-                size="x-large"
-                color="primary"
-                class="text-none px-8 py-3"
-                elevation="4"
-                rounded
-              >
+              <v-btn to="/trips" size="x-large" color="primary" class="text-none px-8 py-3" elevation="4" rounded>
                 Comenzar Ahora
                 <v-icon right class="ml-2">mdi-arrow-right</v-icon>
               </v-btn>
-              <v-btn
-                size="x-large"
-                variant="outlined"
-                color="primary"
-                class="text-none px-8 py-3"
-                rounded
-              >
+              <v-btn size="x-large" variant="outlined" color="primary" class="text-none px-8 py-3" rounded>
                 Ver Demo
                 <v-icon right class="ml-2">mdi-play</v-icon>
               </v-btn>
             </div>
           </v-col>
-          
+
           <v-col cols="12" md="6" class="hero-image animate__animated animate__fadeInRight">
             <div class="position-relative">
-              <v-img
-                src="/hero-illustration.svg"
-                class="floating-animation"
-                max-width="600"
-                alt="Travel Illustration"
-              />
+              <v-img src="/hero-illustration.svg" class="floating-animation" max-width="600"
+                alt="Travel Illustration" />
               <!-- Floating Elements -->
               <div class="floating-element element-1">
                 <v-card class="pa-4" rounded="xl" elevation="4">
@@ -90,11 +73,7 @@
 
         <v-row>
           <v-col cols="12" md="4" v-for="feature in features" :key="feature.title">
-            <v-card
-              class="feature-card h-100"
-              elevation="0"
-              rounded="lg"
-            >
+            <v-card class="feature-card h-100" elevation="0" rounded="lg">
               <v-card-text class="pa-6">
                 <div class="feature-icon mb-4" :class="feature.iconClass">
                   <v-icon size="36" :color="feature.iconColor">{{ feature.icon }}</v-icon>
@@ -122,17 +101,8 @@
 
         <v-row>
           <v-col cols="12" md="4" v-for="destination in destinations" :key="destination.name">
-            <v-card
-              class="destination-card h-100"
-              elevation="4"
-              rounded="lg"
-            >
-              <v-img
-                :src="destination.image"
-                height="250"
-                cover
-                class="destination-image"
-              >
+            <v-card class="destination-card h-100" elevation="4" rounded="lg">
+              <v-img :src="destination.image" height="250" cover class="destination-image">
                 <template v-slot:placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
                     <v-progress-circular indeterminate color="primary"></v-progress-circular>
@@ -142,11 +112,7 @@
               <v-card-text class="pa-6">
                 <h3 class="text-h5 font-weight-bold mb-2">{{ destination.name }}</h3>
                 <p class="text-body-1 text-medium-emphasis mb-4">{{ destination.description }}</p>
-                <v-chip
-                  color="primary"
-                  variant="outlined"
-                  size="small"
-                >
+                <v-chip color="primary" variant="outlined" size="small">
                   {{ destination.category }}
                 </v-chip>
               </v-card-text>
@@ -164,14 +130,7 @@
           <p class="text-h6 text-medium-emphasis mb-8">
             Únete a miles de viajeros que ya están planificando sus próximos destinos
           </p>
-          <v-btn
-            to="/register"
-            size="x-large"
-            color="primary"
-            class="text-none px-8 py-3"
-            elevation="2"
-            rounded
-          >
+          <v-btn to="/register" size="x-large" color="primary" class="text-none px-8 py-3" elevation="2" rounded>
             Crear Cuenta Gratis
             <v-icon right class="ml-2">mdi-arrow-right</v-icon>
           </v-btn>
@@ -240,7 +199,7 @@ export default {
 }
 
 .hero-section {
-  background: linear-gradient(135deg, #f6f8fd 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #d3dbf0 0%, #ffffff 100%);
   min-height: 100vh;
   position: relative;
 }
@@ -288,9 +247,11 @@ export default {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -333,7 +294,7 @@ export default {
 
 .cta-card {
   background: linear-gradient(135deg, var(--v-theme-primary) 0%, #1976d2 100%);
-  color: white;
+  color: rgb(65, 160, 227);
 }
 
 /* Animaciones adicionales */
@@ -363,6 +324,7 @@ export default {
     opacity: 0;
     transform: translate3d(0, 40px, 0);
   }
+
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
@@ -374,6 +336,7 @@ export default {
     opacity: 0;
     transform: translate3d(40px, 0, 0);
   }
+
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);

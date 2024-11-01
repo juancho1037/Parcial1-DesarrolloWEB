@@ -15,75 +15,32 @@
             </div>
 
             <v-form @submit.prevent="login" ref="form" class="login-form">
-              <v-card
-                class="form-card pa-6"
-                elevation="0"
-                rounded="lg"
-              >
-                <v-text-field
-                  v-model="user.email"
-                  label="Correo Electrónico"
-                  type="email"
-                  variant="outlined"
-                  :rules="emailRules"
-                  prepend-inner-icon="mdi-email"
-                  required
-                  class="input-field mb-4"
-                ></v-text-field>
+              <v-card class="form-card pa-6" elevation="0" rounded="lg">
+                <v-text-field v-model="user.email" label="Correo Electrónico" type="email" variant="outlined"
+                  :rules="emailRules" prepend-inner-icon="mdi-email" required class="input-field mb-4"></v-text-field>
 
-                <v-text-field
-                  v-model="user.password"
-                  label="Contraseña"
-                  :type="showPassword ? 'text' : 'password'"
-                  variant="outlined"
-                  :rules="passwordRules"
-                  prepend-inner-icon="mdi-lock"
+                <v-text-field v-model="user.password" label="Contraseña" :type="showPassword ? 'text' : 'password'"
+                  variant="outlined" :rules="passwordRules" prepend-inner-icon="mdi-lock"
                   :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                  @click:append-inner="showPassword = !showPassword"
-                  required
-                  class="input-field mb-2"
-                ></v-text-field>
+                  @click:append-inner="showPassword = !showPassword" required class="input-field mb-2"></v-text-field>
 
                 <div class="d-flex justify-space-between align-center mb-6">
-                  <v-checkbox
-                    v-model="rememberMe"
-                    label="Recordarme"
-                    color="primary"
-                    hide-details
-                    class="mt-0"
-                  ></v-checkbox>
-                  <v-btn
-                    variant="text"
-                    color="primary"
-                    class="text-caption"
-                    @click="forgotPassword"
-                  >
+                  <v-checkbox v-model="rememberMe" label="Recordarme" color="primary" hide-details
+                    class="mt-0"></v-checkbox>
+                  <v-btn variant="text" color="primary" class="text-caption" @click="forgotPassword">
                     ¿Olvidaste tu contraseña?
                   </v-btn>
                 </div>
 
-                <v-btn
-                  type="submit"
-                  color="primary"
-                  size="large"
-                  block
-                  :loading="loading"
-                  class="login-btn mb-4"
-                  rounded
-                  elevation="2"
-                >
+                <v-btn type="submit" color="primary" size="large" block :loading="loading" class="login-btn mb-4"
+                  rounded elevation="2">
                   Iniciar Sesión
                   <v-icon right class="ml-2">mdi-login</v-icon>
                 </v-btn>
 
                 <div class="text-center mb-6">
                   <span class="text-body-2 text-medium-emphasis">¿Nuevo aquí?</span>
-                  <v-btn
-                    variant="text"
-                    color="primary"
-                    class="ml-2"
-                    @click="$router.push('/register')"
-                  >
+                  <v-btn variant="text" color="primary" class="ml-2" @click="$router.push('/register')">
                     Crear una cuenta
                   </v-btn>
                 </div>
@@ -93,23 +50,11 @@
                 </v-divider>
 
                 <div class="d-flex justify-center gap-4">
-                  <v-btn
-                    variant="outlined"
-                    rounded
-                    color="primary"
-                    class="social-btn"
-                    elevation="0"
-                  >
+                  <v-btn variant="outlined" rounded color="primary" class="social-btn" elevation="0">
                     <v-icon left>mdi-google</v-icon>
                     Google
                   </v-btn>
-                  <v-btn
-                    variant="outlined"
-                    rounded
-                    color="primary"
-                    class="social-btn"
-                    elevation="0"
-                  >
+                  <v-btn variant="outlined" rounded color="primary" class="social-btn" elevation="0">
                     <v-icon left>mdi-facebook</v-icon>
                     Facebook
                   </v-btn>
@@ -119,13 +64,8 @@
 
             <!-- Test Credentials Card -->
             <v-expand-transition>
-              <v-card
-                v-if="showTestCredentials"
-                class="mt-6 test-credentials-card"
-                color="info"
-                variant="outlined"
-                rounded="lg"
-              >
+              <v-card v-if="showTestCredentials" class="mt-6 test-credentials-card" color="info" variant="outlined"
+                rounded="lg">
                 <v-card-text class="pa-4">
                   <div class="d-flex align-center mb-2">
                     <v-icon color="info" class="mr-2">mdi-information</v-icon>
@@ -190,19 +130,10 @@
     </v-container>
 
     <!-- Snackbar -->
-    <v-snackbar
-      v-model="snackbar"
-      :color="snackbarColor"
-      :timeout="3000"
-      location="top"
-    >
+    <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" location="top">
       {{ snackbarText }}
       <template v-slot:actions>
-        <v-btn
-          color="white"
-          variant="text"
-          @click="snackbar = false"
-        >
+        <v-btn color="white" variant="text" @click="snackbar = false">
           Cerrar
         </v-btn>
       </template>
@@ -211,10 +142,8 @@
 </template>
 
 <script>
-const TEST_USER = {
-  email: "test@example.com",
-  password: "123456",
-};
+import { useAuthStore } from '@/store/modules/auth';
+import { useAppStore } from '@/store/modules/app';
 
 export default {
   name: 'Login',
@@ -245,44 +174,30 @@ export default {
       if (!this.$refs.form.validate()) return;
 
       this.loading = true;
+      const authStore = useAuthStore();
+      const appStore = useAppStore();
+
       try {
-        // Simulación de delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await authStore.login({
+          email: this.user.email,
+          password: this.user.password
+        });
 
-        if (
-          this.user.email === TEST_USER.email &&
-          this.user.password === TEST_USER.password
-        ) {
-          const token = "test-jwt-token-" + Date.now();
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify({
-            email: TEST_USER.email,
-            name: "Usuario de Prueba"
-          }));
-
-          this.snackbarColor = 'success';
-          this.snackbarText = '¡Bienvenido de nuevo!';
-          this.snackbar = true;
-
-          setTimeout(() => {
-            this.$router.push('/trips');
-          }, 500);
-        } else {
-          throw new Error('Credenciales inválidas');
-        }
+        // El manejo del token y la redirección ya están en el store
       } catch (error) {
-        this.snackbarColor = 'error';
-        this.snackbarText = 'Email o contraseña incorrectos';
-        this.snackbar = true;
+        appStore.showSnackbar({
+          text: error.response?.data?.message || 'Error al iniciar sesión',
+          color: 'error'
+        });
       } finally {
         this.loading = false;
       }
     },
+
     forgotPassword() {
-      this.snackbarColor = 'info';
-      this.snackbarText = 'Función de recuperación de contraseña en desarrollo';
-      this.snackbar = true;
+      this.$router.push('/forgot-password');
     },
+
     toggleTestCredentials() {
       this.showTestCredentials = !this.showTestCredentials;
     }
@@ -403,9 +318,11 @@ export default {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -416,6 +333,7 @@ export default {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -427,6 +345,7 @@ export default {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -453,7 +372,7 @@ export default {
   .form-wrapper {
     padding: 2rem;
   }
-  
+
   .illustration-side {
     display: none;
   }

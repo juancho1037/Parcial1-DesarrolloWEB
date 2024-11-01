@@ -13,23 +13,12 @@
               <v-card-text>
                 <v-row>
                   <v-col cols="12" sm="8">
-                    <v-text-field
-                      v-model="searchQuery"
-                      label="Buscar destinos, ciudades o actividades"
-                      variant="outlined"
-                      density="comfortable"
-                      hide-details
-                      prepend-inner-icon="mdi-magnify"
-                      @keyup.enter="searchDestinations"
-                    ></v-text-field>
+                    <v-text-field v-model="searchQuery" label="Buscar destinos, ciudades o actividades"
+                      variant="outlined" density="comfortable" hide-details prepend-inner-icon="mdi-magnify"
+                      @keyup.enter="searchDestinations"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="4">
-                    <v-btn
-                      color="primary"
-                      block
-                      height="56"
-                      @click="searchDestinations"
-                    >
+                    <v-btn color="primary" block height="56" @click="searchDestinations">
                       Buscar
                       <v-icon end>mdi-arrow-right</v-icon>
                     </v-btn>
@@ -47,34 +36,15 @@
       <v-container>
         <h2 class="text-h4 font-weight-bold mb-6">Destinos Populares</h2>
         <v-row>
-          <v-col
-            v-for="destination in popularDestinations"
-            :key="destination.id"
-            cols="12"
-            sm="6"
-            md="4"
-          >
-            <v-card
-              class="destination-card h-100"
-              elevation="2"
-              @click="showDestinationDetails(destination)"
-            >
-              <v-img
-                :src="destination.image"
-                height="200"
-                cover
-                class="destination-image"
-              >
+          <v-col v-for="destination in popularDestinations" :key="destination.id" cols="12" sm="6" md="4">
+            <v-card class="destination-card h-100" elevation="2" @click="showDestinationDetails(destination)">
+              <v-img :src="destination.image" height="200" cover class="destination-image">
                 <template v-slot:placeholder>
                   <div class="d-flex align-center justify-center fill-height">
                     <v-progress-circular indeterminate></v-progress-circular>
                   </div>
                 </template>
-                <v-chip
-                  class="ma-4"
-                  color="primary"
-                  label
-                >
+                <v-chip class="ma-4" color="primary" label>
                   {{ destination.category }}
                 </v-chip>
               </v-img>
@@ -90,13 +60,8 @@
                 </div>
                 <p class="text-body-2 text-truncate-2">{{ destination.description }}</p>
                 <div class="d-flex align-center mt-2">
-                  <v-rating
-                    v-model="destination.rating"
-                    color="amber"
-                    density="compact"
-                    size="small"
-                    readonly
-                  ></v-rating>
+                  <v-rating v-model="destination.rating" color="amber" density="compact" size="small"
+                    readonly></v-rating>
                   <span class="text-caption ml-2">({{ destination.reviews }} reseñas)</span>
                 </div>
               </v-card-text>
@@ -108,10 +73,7 @@
                   Desde ${{ destination.price }}
                 </div>
                 <v-spacer></v-spacer>
-                <v-btn
-                  color="primary"
-                  variant="tonal"
-                >
+                <v-btn color="primary" variant="tonal">
                   Ver Detalles
                 </v-btn>
               </v-card-actions>
@@ -126,24 +88,10 @@
       <v-container>
         <h2 class="text-h4 font-weight-bold mb-6">Explora por Categoría</h2>
         <v-row>
-          <v-col
-            v-for="category in travelCategories"
-            :key="category.id"
-            cols="12"
-            sm="6"
-            md="3"
-          >
-            <v-card
-              class="category-card"
-              elevation="2"
-              @click="filterByCategory(category.id)"
-            >
+          <v-col v-for="category in travelCategories" :key="category.id" cols="12" sm="6" md="3">
+            <v-card class="category-card" elevation="2" @click="filterByCategory(category.id)">
               <v-card-text class="d-flex align-center pa-6">
-                <v-icon
-                  :color="category.color"
-                  size="36"
-                  class="mr-4"
-                >
+                <v-icon :color="category.color" size="36" class="mr-4">
                   {{ category.icon }}
                 </v-icon>
                 <div>
@@ -164,39 +112,20 @@
       <v-container>
         <h2 class="text-h4 font-weight-bold mb-6">Experiencias Destacadas</h2>
         <v-row>
-          <v-col
-            v-for="experience in featuredExperiences"
-            :key="experience.id"
-            cols="12"
-            md="6"
-          >
+          <v-col v-for="experience in featuredExperiences" :key="experience.id" cols="12" md="6">
             <v-card class="experience-card" elevation="2">
               <v-row no-gutters>
                 <v-col cols="5">
-                  <v-img
-                    :src="experience.image"
-                    class="h-100"
-                    cover
-                  ></v-img>
+                  <v-img :src="experience.image" class="h-100" cover></v-img>
                 </v-col>
                 <v-col cols="7">
                   <v-card-text class="pa-6">
                     <div class="d-flex align-center mb-2">
-                      <v-chip
-                        size="small"
-                        :color="experience.category.color"
-                        variant="tonal"
-                      >
+                      <v-chip size="small" :color="experience.category.color" variant="tonal">
                         {{ experience.category.name }}
                       </v-chip>
-                      <v-rating
-                        v-model="experience.rating"
-                        color="amber"
-                        density="compact"
-                        size="small"
-                        readonly
-                        class="ml-2"
-                      ></v-rating>
+                      <v-rating v-model="experience.rating" color="amber" density="compact" size="small" readonly
+                        class="ml-2"></v-rating>
                     </div>
                     <h3 class="text-h6 font-weight-bold mb-2">{{ experience.title }}</h3>
                     <p class="text-body-2 text-medium-emphasis mb-4">
@@ -206,11 +135,7 @@
                       <div class="text-primary font-weight-bold">
                         ${{ experience.price }} por persona
                       </div>
-                      <v-btn
-                        color="primary"
-                        variant="tonal"
-                        size="small"
-                      >
+                      <v-btn color="primary" variant="tonal" size="small">
                         Más Info
                       </v-btn>
                     </div>
@@ -224,16 +149,9 @@
     </section>
 
     <!-- Destination Details Dialog -->
-    <v-dialog
-      v-model="showDestinationDialog"
-      max-width="800"
-    >
+    <v-dialog v-model="showDestinationDialog" max-width="800">
       <v-card v-if="selectedDestination">
-        <v-img
-          :src="selectedDestination.image"
-          height="300"
-          cover
-        ></v-img>
+        <v-img :src="selectedDestination.image" height="300" cover></v-img>
         <v-card-title class="text-h5 pa-6">
           {{ selectedDestination.name }}
         </v-card-title>
@@ -268,17 +186,10 @@
         </v-card-text>
         <v-card-actions class="pa-6">
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            variant="tonal"
-            @click="showDestinationDialog = false"
-          >
+          <v-btn color="primary" variant="tonal" @click="showDestinationDialog = false">
             Cerrar
           </v-btn>
-          <v-btn
-            color="primary"
-            @click="planTrip(selectedDestination)"
-          >
+          <v-btn color="primary" @click="planTrip(selectedDestination)">
             Planificar Viaje
           </v-btn>
         </v-card-actions>
@@ -417,7 +328,7 @@ export default {
 /* Hero Section Styles */
 .hero-section {
   background: linear-gradient(135deg, var(--v-theme-primary) 0%, #1976d2 100%);
-  color: white;
+  color: rgb(44, 197, 224);
   position: relative;
   overflow: hidden;
 }
@@ -475,11 +386,9 @@ export default {
 
 .category-card:hover {
   transform: translateY(-5px);
-  background: linear-gradient(
-    135deg,
-    rgba(var(--v-theme-primary), 0.05) 0%,
-    rgba(var(--v-theme-primary), 0.1) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(var(--v-theme-primary), 0.05) 0%,
+      rgba(var(--v-theme-primary), 0.1) 100%);
 }
 
 /* Experience Cards */
@@ -506,6 +415,7 @@ export default {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -519,26 +429,40 @@ export default {
 }
 
 /* Animation Delays */
-.destination-card:nth-child(2) { animation-delay: 0.2s; }
-.destination-card:nth-child(3) { animation-delay: 0.4s; }
-.category-card:nth-child(2) { animation-delay: 0.1s; }
-.category-card:nth-child(3) { animation-delay: 0.2s; }
-.category-card:nth-child(4) { animation-delay: 0.3s; }
+.destination-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.destination-card:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.category-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.category-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.category-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
 
 /* Responsive Styles */
 @media (max-width: 960px) {
   .hero-section {
     padding: 40px 0;
   }
-  
+
   .text-h3 {
     font-size: 2rem !important;
   }
-  
+
   .text-h4 {
     font-size: 1.75rem !important;
   }
-  
+
   .search-card {
     margin: 0 16px;
   }

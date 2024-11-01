@@ -28,13 +28,13 @@ export const useAuthStore = defineStore("auth", {
       this.loading = true;
 
       try {
-        // Aquí irá la llamada real a tu API
+        // Llamada a la API del servidor
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/login`,
+          `${import.meta.env.VITE_API_URL}/login`,
           credentials
         );
 
-        const { token, user } = response.data;
+        const { token, user } = response.data.data;
 
         // Guardar token y datos de usuario
         this.token = token;
@@ -70,7 +70,7 @@ export const useAuthStore = defineStore("auth", {
 
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/register`,
+          `${import.meta.env.VITE_API_URL}/register`,
           userData
         );
 
@@ -92,17 +92,35 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
+    async checkAuth() {
+      if (!this.token) return;
+
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+          }
+        );
+        this.user = response.data.data;
+      } catch (error) {
+        console.error("Error al verificar autenticación:", error);
+        this.logout();
+      }
+    },
+
+    // Cerrar sesión
     async logout() {
       const appStore = useAppStore();
 
       try {
-        // Limpiar estado
         this.user = null;
         this.token = null;
         localStorage.removeItem("token");
         delete axios.defaults.headers.common["Authorization"];
 
-        // Redireccionar a login
         router.push("/login");
 
         appStore.showSnackbar({
@@ -118,31 +136,23 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async checkAuth() {
-      if (!this.token) return;
-
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/auth/verify`
-        );
-        this.user = response.data.user;
-      } catch (error) {
-        console.error("Error al verificar autenticación:", error);
-        this.logout();
-      }
-    },
-
+    // Actualizar perfil
     async updateProfile(userData) {
       const appStore = useAppStore();
       this.loading = true;
 
       try {
         const response = await axios.put(
-          `${import.meta.env.VITE_API_URL}/users/profile`,
-          userData
+          `${import.meta.env.VITE_API_URL}/profile`,
+          userData,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+          }
         );
 
-        this.user = response.data;
+        this.user = response.data.data;
         appStore.showSnackbar({
           text: "Perfil actualizado correctamente",
           color: "success",
@@ -159,44 +169,74 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
+    // Solicitar restablecimiento de contraseña
     async requestPasswordReset(email) {
       const appStore = useAppStore();
+      this.loading = true;
 
       try {
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/forgot-password`,
-          { email }
-        );
+        await axios.post(`${import.meta.env.VITE_API_URL}/forgot-password`, {
+          email,
+        });
+
+        appStore.showSnackbar({
+          text: "Se han enviado las instrucciones a tu correo",
+          color: "success",
+        });
       } catch (error) {
         console.error(
           "Error al solicitar restablecimiento de contraseña:",
           error
         );
+        appStore.showSnackbar({
+          text:
+            error.response?.data?.message ||
+            "Error al solicitar restablecimiento",
+          color: "error",
+        });
         throw error;
+      } finally {
+        this.loading = false;
       }
     },
 
+    // Restablecer contraseña
     async resetPassword({ token, password }) {
       const appStore = useAppStore();
+      this.loading = true;
 
       try {
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/reset-password`,
-          { token, password }
-        );
+        await axios.post(`${import.meta.env.VITE_API_URL}/reset-password`, {
+          token,
+          password,
+        });
+
+        appStore.showSnackbar({
+          text: "Contraseña restablecida correctamente",
+          color: "success",
+        });
+
+        router.push("/login");
       } catch (error) {
         console.error("Error al restablecer contraseña:", error);
+        appStore.showSnackbar({
+          text:
+            error.response?.data?.message || "Error al restablecer contraseña",
+          color: "error",
+        });
         throw error;
+      } finally {
+        this.loading = false;
       }
     },
 
-    // Persistencia de sesión
+    // Verificar sesión
     async checkSession() {
       if (!this.token) return false;
 
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/auth/check-session`,
+          `${import.meta.env.VITE_API_URL}/profile`,
           {
             headers: {
               Authorization: `Bearer ${this.token}`,
@@ -204,7 +244,7 @@ export const useAuthStore = defineStore("auth", {
           }
         );
 
-        this.user = response.data.user;
+        this.user = response.data.data;
         return true;
       } catch (error) {
         console.error("Error al verificar sesión:", error);
