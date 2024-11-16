@@ -1,6 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandlers.js";
+import patientRoutes from "./routes/patientRoutes.js";
+import doctorRoutes from "./routes/doctorRoutes.js";
+import appointmentRoutes from "./routes/appointmentRoutes.js";
+import pool from "./config/database.js";
 
 dotenv.config();
 
@@ -20,9 +24,13 @@ class Server {
   }
 
   routes() {
-    this.app.get("/", (req, res) => {
-      res.send("Servidor funcionando correctamente.");
+    this.app.get("/", async (req, res) => {
+      res.status(200).json({ message: "Hola!!!" });
     });
+
+    this.app.use("/api/patient", patientRoutes);
+    this.app.use("/api/doctor", doctorRoutes);
+    this.app.use("/api/", appointmentRoutes);
   }
 
   errorHandling() {

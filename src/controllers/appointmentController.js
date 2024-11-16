@@ -1,4 +1,5 @@
 import Appointment from "../models/appointments.js";
+import pool from "../config/database.js";
 
 export const createAppointment = async (req, res) => {
   try {
@@ -53,6 +54,7 @@ export const getAppointments = async (req, res) => {
 export const cancelAppointment = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("el id es: ", id);
 
     const query = `
       DELETE FROM appointments
@@ -60,6 +62,7 @@ export const cancelAppointment = async (req, res) => {
       RETURNING *;
     `;
     const result = await pool.query(query, [id]);
+    console.log("result -> ", result);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Cita no encontrada." });

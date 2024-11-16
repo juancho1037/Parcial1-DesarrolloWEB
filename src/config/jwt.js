@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 class JWT {
-  static generateToken(payload, expiresIn = "1h") {
+  static generateToken(payload, expiresIn = "30m") {
     return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn });
   }
 
