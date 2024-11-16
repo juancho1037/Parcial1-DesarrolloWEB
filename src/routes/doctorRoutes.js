@@ -1,16 +1,21 @@
 import express from "express";
-import {
-  getDoctor,
-  getDoctorAppointments,
-} from "../controllers/doctorController.js";
-import { authenticateToken } from "../middlewares/authMiddleware.js";
+import doctorController from "../controllers/doctorController.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 // Obtener datos de un médico
-router.get("/:doctorId", authenticateToken, getDoctor);
+router.get(
+  "/:doctorId",
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  (req, res) => doctorController.getDoctor(req, res)
+);
 
 // Listar citas de un médico específico
-router.get("/:doctorId/appointment", authenticateToken, getDoctorAppointments);
+router.get(
+  "/:doctorId/appointment",
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  (req, res) => doctorController.getDoctorAppointments(req, res)
+);
 
 export default router;

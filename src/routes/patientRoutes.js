@@ -1,37 +1,38 @@
 import express from "express";
-import {
-  loginPatient,
-  getPatientAppointments,
-  createAppointment,
-  updateAppointment,
-  deleteAppointment,
-} from "../controllers/patientController.js";
-import { authenticateToken } from "../middlewares/authMiddleware.js";
-import { validateAppointment } from "../middlewares/validationMiddleware.js";
+import patientController from "../controllers/patientController.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
+import validationMiddleware from "../middlewares/validationMiddleware.js";
 
 const router = express.Router();
 
 // Inicio de sesión del paciente
-router.post("/login", loginPatient);
+router.post("/login", (req, res) => patientController.loginPatient(req, res));
 
 // Manejo de citas del paciente
-router.get("/appointment", authenticateToken, getPatientAppointments);
+router.get(
+  "/appointment",
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  (req, res) => patientController.getPatientAppointments(req, res)
+);
+
 router.post(
   "/appointment",
-  authenticateToken,
-  validateAppointment,
-  createAppointment
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  ...validationMiddleware.validateAppointment(),
+  (req, res) => patientController.createAppointment(req, res)
 );
+
 router.put(
   "/appointment/:appointmentId",
-  authenticateToken,
-  validateAppointment,
-  updateAppointment
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  ...validationMiddleware.validateAppointment(),
+  (req, res) => patientController.updateAppointment(req, res)
 );
+
 router.delete(
   "/appointment/:appointmentId",
-  authenticateToken,
-  deleteAppointment
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  (req, res) => patientController.deleteAppointment(req, res)
 );
 
 export default router;

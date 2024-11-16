@@ -1,37 +1,34 @@
 import express from "express";
-import { createAppointment } from "../controllers/appointmentController.js";
-import {
-  authenticateToken,
-  // authorizeRole,
-} from "../middlewares/authMiddleware.js";
-import { validateAppointment } from "../middlewares/validationMiddleware.js";
-import {
-  getAppointments,
-  cancelAppointment,
-} from "../controllers/appointmentController.js";
+import appointmentController from "../controllers/appointmentController.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
+import validationMiddleware from "../middlewares/validationMiddleware.js";
 
 const router = express.Router();
 
 router.post(
-  "/appointments",
-  authenticateToken,
-  // authorizeRole("patient"),
-  validateAppointment,
-  createAppointment
+  "/",
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  ...validationMiddleware.validateAppointment(),
+  (req, res) => appointmentController.createAppointment(req, res)
 );
 
 router.get(
-  "/appointments",
-  authenticateToken,
-  // authorizeRole("admin"), // Solo administradores pueden ver todas las citas
-  getAppointments
+  "/",
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  (req, res) => appointmentController.getAppointments(req, res)
 );
 
 router.delete(
-  "/appointments/:id",
-  authenticateToken,
-  // authorizeRole("admin"), // Solo administradores pueden cancelar citas
-  cancelAppointment
+  "/:id",
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  (req, res) => appointmentController.cancelAppointment(req, res)
+);
+
+router.put(
+  "/:id",
+  (req, res, next) => authMiddleware.authenticateToken(req, res, next),
+  ...validationMiddleware.validateAppointment(false),
+  (req, res) => appointmentController.updateAppointment(req, res)
 );
 
 export default router;
